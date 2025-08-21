@@ -13,14 +13,11 @@ using Soenneker.Extensions.Task;
 
 namespace Soenneker.DNSimple.Contacts;
 
-/// <summary>
-/// Utility class for managing DNSimple contacts
-/// </summary>
+///<inheritdoc cref="IDNSimpleContactsUtil"/>
 public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
 {
     private readonly IDNSimpleOpenApiClientUtil _clientUtil;
     private readonly int _accountId;
-
 
     public DNSimpleContactsUtil(IDNSimpleOpenApiClientUtil clientUtil, IConfiguration configuration)
     {
@@ -50,8 +47,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
             OrganizationName = contact.OrganizationName
         };
 
-        ContactsPostResponse? response =
-            await client[_accountId].Contacts.PostAsContactsPostResponseAsync(requestBody, cancellationToken: cancellationToken).NoSync();
+        ContactsPostResponse? response = await client[_accountId].Contacts.PostAsync(requestBody, cancellationToken: cancellationToken).NoSync();
         return response.Data;
     }
 
@@ -59,8 +55,8 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
     {
         DNSimpleOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
 
-        WithContactGetResponse? response =
-            await client[_accountId].Contacts[contactId].GetAsWithContactGetResponseAsync(cancellationToken: cancellationToken).NoSync();
+        WithContactGetResponse? response = await client[_accountId].Contacts[contactId].GetAsync(cancellationToken: cancellationToken).NoSync();
+
         return response.Data;
     }
 
@@ -88,7 +84,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
 
         WithContactPatchResponse? response = await client[_accountId]
                                                    .Contacts[contactId]
-                                                   .PatchAsWithContactPatchResponseAsync(requestBody, cancellationToken: cancellationToken)
+                                                   .PatchAsync(requestBody, cancellationToken: cancellationToken)
                                                    .NoSync();
         return response.Data;
     }
@@ -104,7 +100,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
     {
         DNSimpleOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
 
-        ContactsGetResponse? response = await client[_accountId].Contacts.GetAsContactsGetResponseAsync(cancellationToken: cancellationToken).NoSync();
+        ContactsGetResponse? response = await client[_accountId].Contacts.GetAsync(cancellationToken: cancellationToken).NoSync();
         return response.Data?.ToArray() ?? [];
     }
 

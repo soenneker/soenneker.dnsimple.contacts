@@ -100,7 +100,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
     {
         DNSimpleOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
 
-        ContactsGetResponse? response = await client[_accountId].Contacts.GetAsync(cancellationToken: cancellationToken).NoSync();
+        ListContacts200? response = await client[_accountId].Contacts.GetAsync(cancellationToken: cancellationToken).NoSync();
         return response.Data?.ToArray() ?? [];
     }
 

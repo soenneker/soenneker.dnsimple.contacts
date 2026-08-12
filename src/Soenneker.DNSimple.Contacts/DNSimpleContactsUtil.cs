@@ -29,7 +29,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
     {
         DNSimpleOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
 
-        var requestBody = new ContactsPostRequestBody
+        var requestBody = new ContactCreateRequest
         {
             FirstName = contact.FirstName,
             LastName = contact.LastName,
@@ -47,7 +47,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
             OrganizationName = contact.OrganizationName
         };
 
-        ContactsPostResponse? response = await client[_accountId].Contacts.PostAsync(requestBody, cancellationToken: cancellationToken).NoSync();
+        CreateContact201Response? response = await client[_accountId].Contacts.PostAsync(requestBody, cancellationToken: cancellationToken).NoSync();
         return response.Data;
     }
 
@@ -55,7 +55,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
     {
         DNSimpleOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
 
-        WithContactGetResponse? response = await client[_accountId].Contacts[contactId].GetAsync(cancellationToken: cancellationToken).NoSync();
+        GetContact200Response? response = await client[_accountId].Contacts[contactId].GetAsync(cancellationToken: cancellationToken).NoSync();
 
         return response.Data;
     }
@@ -64,7 +64,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
     {
         DNSimpleOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
 
-        var requestBody = new WithContactPatchRequestBody
+        var requestBody = new ContactUpdateRequest
         {
             FirstName = contact.FirstName,
             LastName = contact.LastName,
@@ -82,7 +82,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
             OrganizationName = contact.OrganizationName
         };
 
-        WithContactPatchResponse? response = await client[_accountId]
+        UpdateContact200Response? response = await client[_accountId]
                                                    .Contacts[contactId]
                                                    .PatchAsync(requestBody, cancellationToken: cancellationToken)
                                                    .NoSync();
@@ -100,7 +100,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
     {
         DNSimpleOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
 
-        ListContacts200? response = await client[_accountId].Contacts.GetAsync(cancellationToken: cancellationToken).NoSync();
+        ListContacts200Response? response = await client[_accountId].Contacts.GetAsync(cancellationToken: cancellationToken).NoSync();
         return response.Data?.ToArray() ?? [];
     }
 

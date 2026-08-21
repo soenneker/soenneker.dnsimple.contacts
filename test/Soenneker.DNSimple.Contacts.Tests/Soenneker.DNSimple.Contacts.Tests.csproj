@@ -26,6 +26,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         <PackageReference Include="Soenneker.Tests.HostedUnit" Version="4.0.183" />
 <<<<<<< HEAD
         <PackageReference Include="TUnit" Version="1.64.13" />
@@ -40,6 +41,9 @@
 =======
         <PackageReference Include="Soenneker.Tests.HostedUnit" Version="4.0.195" />
 >>>>>>> bd4406833e10d45fd450b01847f50835fc4efacd
+=======
+        <PackageReference Include="Soenneker.Tests.HostedUnit" Version="4.0.196" />
+>>>>>>> 31082ea7f4a8f9186ca804c27b4de940d4b73022
         <PackageReference Include="TUnit" Version="1.65.0" />
 >>>>>>> 761c8a7faeb6be025eee485f21466535e60331c9
     </ItemGroup>

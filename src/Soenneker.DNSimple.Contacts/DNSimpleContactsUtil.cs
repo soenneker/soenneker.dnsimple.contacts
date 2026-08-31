@@ -6,6 +6,7 @@ using Soenneker.DNSimple.OpenApiClient.Item.Contacts.Item;
 using Soenneker.DNSimple.OpenApiClient.Models;
 using Soenneker.DNSimple.OpenApiClientUtil.Abstract;
 using Soenneker.Extensions.Configuration;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Soenneker.Extensions.ValueTask;
@@ -27,6 +28,11 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
 
     public async ValueTask<Contact> Create(Contact contact, CancellationToken cancellationToken = default)
     {
+        return await Create(_accountId, contact, cancellationToken).NoSync();
+    }
+
+    private async ValueTask<Contact> Create(int accountId, Contact contact, CancellationToken cancellationToken)
+    {
         DNSimpleOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
 
         var requestBody = new ContactCreateRequest
@@ -47,8 +53,8 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
             OrganizationName = contact.OrganizationName
         };
 
-        CreateContact201Response? response = await client[_accountId].Contacts.PostAsync(requestBody, cancellationToken: cancellationToken).NoSync();
-        return response.Data;
+        CreateContact201Response? response = await client[accountId].Contacts.PostAsync(requestBody, cancellationToken: cancellationToken).NoSync();
+        return response?.Data ?? throw new InvalidOperationException("DNSimple returned no contact after creation.");
     }
 
     public async ValueTask<Contact> Get(int contactId, CancellationToken cancellationToken = default)
@@ -57,7 +63,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
 
         GetContact200Response? response = await client[_accountId].Contacts[contactId].GetAsync(cancellationToken: cancellationToken).NoSync();
 
-        return response.Data;
+        return response?.Data ?? throw new InvalidOperationException("DNSimple returned no contact for the requested ID.");
     }
 
     public async ValueTask<Contact> Update(int contactId, Contact contact, CancellationToken cancellationToken = default)
@@ -86,7 +92,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
                                                    .Contacts[contactId]
                                                    .PatchAsync(requestBody, cancellationToken: cancellationToken)
                                                    .NoSync();
-        return response.Data;
+        return response?.Data ?? throw new InvalidOperationException("DNSimple returned no contact after the update.");
     }
 
     public async ValueTask Delete(int accountId, int contactId, CancellationToken cancellationToken = default)
@@ -101,7 +107,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
         DNSimpleOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
 
         ListContacts200Response? response = await client[_accountId].Contacts.GetAsync(cancellationToken: cancellationToken).NoSync();
-        return response.Data?.ToArray() ?? [];
+        return response?.Data?.ToArray() ?? [];
     }
 
     public async ValueTask<Contact> CreateBasic(int accountId, string firstName, string lastName, string email, string address1, string city,
@@ -120,6 +126,6 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
             Phone = phone
         };
 
-        return await Create(contact, cancellationToken);
+        return await Create(accountId, contact, cancellationToken).NoSync();
     }
 }

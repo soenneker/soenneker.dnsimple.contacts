@@ -43,10 +43,10 @@ public interface IDNSimpleContactsUtil
     ValueTask Delete(int accountId, int contactId, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Lists all DNSimple contacts for the configured account.
+    /// Lists the contacts returned by DNSimple for the configured account.
     /// </summary>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>An array of contacts.</returns>
+    /// <returns>The contacts in the API response.</returns>
     ValueTask<Contact[]> List(CancellationToken cancellationToken = default);
 
     /// <summary>

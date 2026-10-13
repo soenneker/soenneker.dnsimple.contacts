@@ -23,7 +23,7 @@ public sealed class DNSimpleContactsUtil : IDNSimpleContactsUtil
     public DNSimpleContactsUtil(IDNSimpleOpenApiClientUtil clientUtil, IConfiguration configuration)
     {
         _clientUtil = clientUtil;
-        _accountId = configuration.GetValueStrict<int>("DNSimple:AccountId");
+        _accountId = (int)new System.ComponentModel.Int32Converter().ConvertFromInvariantString(configuration.GetStringStrict("DNSimple:AccountId"))!;
     }
 
     public async ValueTask<Contact> Create(Contact contact, CancellationToken cancellationToken = default)
